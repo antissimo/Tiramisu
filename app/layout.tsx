@@ -1,18 +1,22 @@
 import './globals.css';
+import Footer from './components/Footer';
+
 import Navigation from './components/Navbar';
 
 export const metadata = {
-  title: 'Plavi Oblutak',
-  description: 'Stručnjaci za sanacije, restauracije i izgradnju objekata',
+  title: 'Tiramisu'
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="hr">
-      <body>
+      <body className="flex flex-col min-h-screen">
         <Navigation />
-        <main className="pt-24">{children}</main>
+        {/* main flex-1 will fill the remaining space between nav and footer */}
+        <main className="flex-1 pt-24">{children}</main>
+        <Footer />
       </body>
     </html>
   );
 }
+

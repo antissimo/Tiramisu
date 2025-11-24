@@ -1,38 +1,23 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState, memo } from 'react';
+import { pages } from '../config/pages';
 
-type Page = {
-  title: string;
-  path: string;
-};
-
-const pages: Page[] = [
-  { title: 'Naslovna', path: '/' },
-  { title: 'Djelatnosti', path: '/djelatnosti' },
-  { title: 'Objekti', path: '/objekti' },
-  { title: 'Radovi', path: '/radovi' },
-  { title: 'Reference', path: '/reference' },
-  { title: 'O nama', path: '/onama' },
-];
-
-// Memoized PageLink to prevent unnecessary re-renders
-const PageLink = memo(({ page, currentPath }: { page: Page; currentPath?: string }) => {
+const PageLink = memo(({ page, currentPath }: { page: typeof pages[0]; currentPath?: string }) => {
   const isActive =
-    page.path === '/'
-      ? currentPath === page.path
-      : currentPath?.startsWith(page.path);
+    page.path === '/' ? currentPath === page.path : currentPath?.startsWith(page.path);
 
   return (
     <li>
       <Link href={page.path}>
         <span
-          className={`border rounded-sm border-transparent px-4 py-2 whitespace-nowrap transition-colors duration-200 ${
+          className={`border rounded-sm border-transparent px-2.5 py-1 whitespace-nowrap text-sm transition-colors duration-200 ${
             isActive
-              ? 'text-blue-700 border-blue-700 font-semibold'
-              : 'text-gray-700 hover:text-gray-800 hover:bg-blue-50'
+              ? 'text-[#3c3837] border-[#3c3837] font-semibold'
+              : 'text-[#3c3837]/70 hover:text-[#3c3837] hover:bg-[#a68835]/20'
           }`}
         >
           {page.title}
@@ -45,17 +30,23 @@ const PageLink = memo(({ page, currentPath }: { page: Page; currentPath?: string
 export default function Navigation() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  const toggleMenu = () => setIsOpen((prev) => !prev);
 
   return (
-    <nav className="sticky top-0 bg-white shadow-md z-50">
-      <div className="max-w-6xl mx-auto flex justify-between items-center px-6 py-4">
+    <nav className="sticky top-0 bg-white shadow z-50">
+      <div className="max-w-6xl mx-auto flex justify-between items-center px-4 py-1.5">
+        {/* Logo */}
         <Link href="/">
-          <span className="text-2xl font-bold text-blue-700 cursor-pointer">Plavi oblutak</span>
+          <Image
+            src="/logo.png"
+            width={100}
+            height={100}
+            alt="Tiramisu Logo"
+            className="w-28 md:w-32"
+          />
         </Link>
 
         {/* Desktop links */}
-        <ul className="hidden md:flex space-x-6 text-gray-700 uppercase text-sm">
+        <ul className="hidden md:flex space-x-6 text-[#3c3837] uppercase text-sm">
           {pages.map((page) => (
             <PageLink key={page.path} page={page} currentPath={pathname} />
           ))}
@@ -64,30 +55,29 @@ export default function Navigation() {
         {/* Mobile hamburger */}
         <div className="md:hidden relative">
           <button
-            onClick={toggleMenu}
-            className="flex flex-col w-8 h-8 justify-between items-center focus:outline-none"
+            onClick={() => setIsOpen((prev) => !prev)}
+            className="flex flex-col w-6 h-6 justify-between items-center focus:outline-none"
             aria-label="Toggle menu"
           >
             <span
-              className={`h-1 w-full bg-blue-700 rounded transition-transform duration-300 ${
-                isOpen ? 'rotate-45 translate-y-3' : ''
+              className={`h-0.5 w-full bg-[#3c3837] rounded transition-transform duration-300 ${
+                isOpen ? 'rotate-45 translate-y-1.5' : ''
               }`}
             />
             <span
-              className={`h-1 w-full bg-blue-700 rounded transition-opacity duration-300 ${
+              className={`h-0.5 w-full bg-[#3c3837] rounded transition-opacity duration-300 ${
                 isOpen ? 'opacity-0' : ''
               }`}
             />
             <span
-              className={`h-1 w-full bg-blue-700 rounded transition-transform duration-300 ${
-                isOpen ? '-rotate-45 -translate-y-3' : ''
+              className={`h-0.5 w-full bg-[#3c3837] rounded transition-transform duration-300 ${
+                isOpen ? '-rotate-45 -translate-y-1.5' : ''
               }`}
             />
           </button>
 
-          {/* Mobile menu - render only if open */}
           {isOpen && (
-            <ul className="absolute top-full left-0 w-full bg-white flex flex-col items-center py-6 space-y-4 border-t border-gray-200">
+            <ul className="absolute top-full left-0 w-full bg-white flex flex-col items-center py-3 space-y-2 border-t border-[#3c3837]/30">
               {pages.map((page) => (
                 <PageLink key={page.path} page={page} currentPath={pathname} />
               ))}
