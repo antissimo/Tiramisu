@@ -3,11 +3,14 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { onamaSections } from '../config/oNama';
+import { useTheme } from '../context/ThemeContext';
 
 export default function ONamaPage() {
+  const theme = useTheme();
+
   return (
-    <div className="min-h-screen bg-[#FFFFFF] px-4 py-12 space-y-24">
-      <h1 className="text-4xl md:text-5xl font-bold text-[#3c3837] text-center mb-16">
+    <div className="min-h-screen px-4 py-12 space-y-24" style={{ backgroundColor: theme.colors.background }}>
+      <h1 className="text-4xl md:text-5xl font-bold text-center mb-16" style={{ color: theme.colors.secondary }}>
         O Nama
       </h1>
 
@@ -21,7 +24,8 @@ export default function ONamaPage() {
             viewport={{ once: true, amount: 0.2 }}
           >
             {/* Entire Card */}
-            <div className={`flex flex-col md:flex-row items-center gap-6 bg-[#e8d6c7] rounded-2xl shadow-lg border border-[#3c3837]/30 p-6 ${sec.reverse ? 'md:flex-row-reverse' : ''}`}>
+            <div className={`flex flex-col md:flex-row items-center gap-6 rounded-2xl shadow-lg border p-6 ${sec.reverse ? 'md:flex-row-reverse' : ''}`} 
+                 style={{ backgroundColor: theme.colors.primary, borderColor: theme.colors.secondary, borderStyle: 'solid' }}>
               {/* Image */}
               <div className="w-full md:w-1/2 rounded-xl overflow-hidden">
                 <Image
@@ -35,7 +39,7 @@ export default function ONamaPage() {
               </div>
 
               {/* Text */}
-              <div className="w-full md:w-1/2 text-[#3c3837] text-lg leading-relaxed">
+              <div className="w-full md:w-1/2 text-lg leading-relaxed" style={{ color: theme.colors.secondary }}>
                 {sec.text}
               </div>
             </div>

@@ -1,24 +1,28 @@
 'use client';
 
 import Link from 'next/link';
+import { useTheme } from '../context/ThemeContext';
 
 export default function KontaktPage() {
+  const theme = useTheme();
+
   return (
-    <div className="min-h-[calc(100vh-4rem)] bg-[#FFFFFF] px-4 py-6 flex justify-center items-start">
+    <div className="min-h-[calc(100vh-4rem)] px-4 py-6 flex justify-center items-start" style={{ backgroundColor: theme.colors.background }}>
       {/* Card */}
-      <div className="w-full max-w-2xl bg-[#a68835]/10 p-6 rounded-xl shadow-md border border-[#a68835]/20">
+      <div className="w-full max-w-2xl p-6 rounded-xl shadow-md border" 
+           style={{ backgroundColor: theme.colors.primary, borderColor: theme.colors.accent }}>
 
         {/* Title */}
-        <h1 className="text-2xl md:text-3xl font-bold text-[#3c3837] mb-4 text-center">
+        <h1 className="text-2xl md:text-3xl font-bold mb-4 text-center" style={{ color: theme.colors.secondary }}>
           Kontakt
         </h1>
 
-        <div className="flex flex-col space-y-3 text-[#3c3837]">
+        <div className="flex flex-col space-y-3" style={{ color: theme.colors.secondary }}>
 
           {/* Phone */}
           <div className="flex items-center space-x-2">
             <span className="font-semibold">Telefon:</span>
-            <a href="tel:+385912345678" className="hover:text-[#a68835] transition-colors">
+            <a href="tel:+385912345678" className="hover:text-accent transition-colors" style={{ color: theme.colors.secondary }}>
               +385 91 234 5678
             </a>
           </div>
@@ -26,7 +30,7 @@ export default function KontaktPage() {
           {/* Email */}
           <div className="flex items-center space-x-2">
             <span className="font-semibold">Email:</span>
-            <a href="mailto:info@tiramisu.bar" className="hover:text-[#a68835] transition-colors">
+            <a href="mailto:info@tiramisu.bar" className="hover:text-accent transition-colors" style={{ color: theme.colors.secondary }}>
               info@tiramisu.bar
             </a>
           </div>
@@ -38,7 +42,8 @@ export default function KontaktPage() {
               href="https://www.tiktok.com/@tiramisu.bar.split"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-[#a68835] transition-colors"
+              className="hover:text-accent transition-colors"
+              style={{ color: theme.colors.secondary }}
             >
               @tiramisu.bar.split
             </a>

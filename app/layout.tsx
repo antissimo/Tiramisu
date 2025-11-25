@@ -2,6 +2,7 @@ import './globals.css';
 import Footer from './components/Footer';
 
 import Navigation from './components/Navbar';
+import { ThemeProvider } from "./context/ThemeContext";
 
 export const metadata = {
   title: 'Tiramisu'
@@ -9,6 +10,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
+    <ThemeProvider>
     <html lang="hr">
       <body className="flex flex-col min-h-screen">
         <Navigation />
@@ -17,6 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Footer />
       </body>
     </html>
+    </ThemeProvider>
   );
 }
 

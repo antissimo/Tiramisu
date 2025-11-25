@@ -2,11 +2,14 @@
 
 import { locations } from "../config/locations";
 import Image from "next/image";
+import { useTheme } from '../context/ThemeContext';
 
 export default function LokacijePage() {
+  const theme = useTheme();
+
   return (
-    <div className="min-h-screen bg-[#FFFFFF] px-4 py-8">
-      <h1 className="text-3xl md:text-4xl font-bold text-[#3c3837] mb-8 text-center">
+    <div className="min-h-screen px-4 py-8" style={{ backgroundColor: theme.colors.background }}>
+      <h1 className="text-3xl md:text-4xl font-bold mb-8 text-center" style={{ color: theme.colors.secondary }}>
         Lokacije
       </h1>
 
@@ -17,9 +20,8 @@ export default function LokacijePage() {
             href={loc.googleMaps}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-[#a68835]/10 border border-[#3c3837]/30 rounded-lg overflow-hidden shadow 
-                       transition-all duration-300 ease-out hover:shadow-xl 
-                       hover:scale-105 hover:opacity-90 flex flex-col"
+            className="rounded-lg overflow-hidden shadow flex flex-col transition-all duration-300 ease-out hover:shadow-xl hover:scale-105 hover:opacity-90"
+            style={{ backgroundColor: theme.colors.primary, border: `1px solid ${theme.colors.secondary}` }}
           >
             {/* Image */}
             <div className="relative w-full h-48">
@@ -32,11 +34,18 @@ export default function LokacijePage() {
             </div>
 
             {/* Text content */}
-            <div className="p-4 flex flex-col justify-between flex-1">
-              <h2 className="text-xl font-semibold text-[#3c3837] mb-2">
+            <div className="p-4 flex flex-col justify-between flex-1 text-center">
+              <h2 className="text-xl font-semibold mb-1" style={{ color: theme.colors.secondary }}>
                 {loc.name}
               </h2>
-              <span className="text-sm text-[#3c3837]/70 hover:text-[#a68835] transition-colors">
+              {loc.radnoVrijeme && (
+                <div className="text-sm mb-2" style={{ color: theme.colors.secondary }}>
+                  {loc.radnoVrijeme.split('\n').map((line, idx) => (
+                    <div key={idx}>{line}</div>
+                  ))}
+                </div>
+              )}
+              <span className="text-sm hover:transition-colors" style={{ color: theme.colors.secondary + 'b3' }}>
                 Pogledaj na Google Maps
               </span>
             </div>
