@@ -4,8 +4,7 @@ import Link from 'next/link';
 import { useTheme } from '../context/ThemeContext';
 
 export default function KontaktPage() {
-  const theme = useTheme();
-
+const { theme, toggleTheme } = useTheme();
   return (
     <div className="min-h-[calc(100vh-4rem)] px-4 py-6 flex justify-center items-start" style={{ backgroundColor: theme.colors.background }}>
       {/* Card */}

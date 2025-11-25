@@ -5,8 +5,7 @@ import Image from "next/image";
 import { useTheme } from '../context/ThemeContext';
 
 export default function LokacijePage() {
-  const theme = useTheme();
-
+const { theme, toggleTheme } = useTheme();
   return (
     <div className="min-h-screen px-4 py-8" style={{ backgroundColor: theme.colors.background }}>
       <h1 className="text-3xl md:text-4xl font-bold mb-8 text-center" style={{ color: theme.colors.secondary }}>

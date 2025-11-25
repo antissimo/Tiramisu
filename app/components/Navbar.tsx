@@ -5,10 +5,13 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState, memo } from 'react';
 import { pages } from '../config/pages';
+import { useTheme} from '../context/ThemeContext';
+import { FaMoon, FaSun } from 'react-icons/fa';
+import logo from '../assets/logo.png';
+import logoDark from '../assets/logoDarkTheme.png';
 
-const PageLink = memo(({ page, currentPath }: { page: typeof pages[0]; currentPath?: string }) => {
-  const isActive =
-    page.path === '/' ? currentPath === page.path : currentPath?.startsWith(page.path);
+const PageLink = memo(({ page, currentPath, theme }: { page: typeof pages[0]; currentPath?: string; theme: any }) => {
+  const isActive = page.path === '/' ? currentPath === page.path : currentPath?.startsWith(page.path);
 
   return (
     <li>
@@ -16,8 +19,8 @@ const PageLink = memo(({ page, currentPath }: { page: typeof pages[0]; currentPa
         <span
           className={`border rounded-sm border-transparent px-2.5 py-1 whitespace-nowrap text-sm transition-colors duration-200 ${
             isActive
-              ? 'text-[#3c3837] border-[#3c3837] font-semibold'
-              : 'text-[#3c3837]/70 hover:text-[#3c3837] hover:bg-[#a68835]/20'
+              ? `text-[${theme.colors.secondary}] border-[${theme.colors.secondary}] font-semibold`
+              : `text-[${theme.colors.secondary}]/70 hover:text-[${theme.colors.secondary}] hover:bg-[${theme.colors.accent}]/20`
           }`}
         >
           {page.title}
@@ -27,17 +30,36 @@ const PageLink = memo(({ page, currentPath }: { page: typeof pages[0]; currentPa
   );
 });
 
+function ThemeToggleButton() {
+  const { toggleTheme, isDark, theme } = useTheme();
+
+  return (
+    <button
+      onClick={toggleTheme}
+      className="flex items-center justify-center w-10 h-10 rounded-full border transition-colors"
+      style={{
+        backgroundColor: isDark ? theme.colors.primary : theme.colors.secondary,
+        color: isDark ? theme.colors.secondary : theme.colors.primary,
+      }}
+      aria-label="Toggle theme"
+    >
+      {isDark ? <FaSun /> : <FaMoon />}
+    </button>
+  );
+}
+
 export default function Navigation() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const { theme , isDark} = useTheme();
 
   return (
-    <nav className="sticky top-0 bg-white shadow z-50">
+    <nav className="sticky top-0 shadow z-50" style={{ backgroundColor: theme.colors.background }}>
       <div className="max-w-6xl mx-auto flex justify-between items-center px-4 py-1.5">
         {/* Logo */}
         <Link href="/">
           <Image
-            src="/logo.png"
+            src={isDark ? logoDark : logo}
             width={100}
             height={100}
             alt="Tiramisu Logo"
@@ -46,44 +68,65 @@ export default function Navigation() {
         </Link>
 
         {/* Desktop links */}
-        <ul className="hidden md:flex space-x-6 text-[#3c3837] uppercase text-sm">
+        <ul className="hidden md:flex space-x-6 uppercase text-sm items-center">
           {pages.map((page) => (
-            <PageLink key={page.path} page={page} currentPath={pathname} />
+            <PageLink key={page.path} page={page} currentPath={pathname} theme={theme} />
           ))}
+          <li>
+            <ThemeToggleButton />
+          </li>
         </ul>
 
         {/* Mobile hamburger */}
         <div className="md:hidden relative">
-          <button
-            onClick={() => setIsOpen((prev) => !prev)}
-            className="flex flex-col w-6 h-6 justify-between items-center focus:outline-none"
-            aria-label="Toggle menu"
-          >
-            <span
-              className={`h-0.5 w-full bg-[#3c3837] rounded transition-transform duration-300 ${
-                isOpen ? 'rotate-45 translate-y-1.5' : ''
-              }`}
-            />
-            <span
-              className={`h-0.5 w-full bg-[#3c3837] rounded transition-opacity duration-300 ${
-                isOpen ? 'opacity-0' : ''
-              }`}
-            />
-            <span
-              className={`h-0.5 w-full bg-[#3c3837] rounded transition-transform duration-300 ${
-                isOpen ? '-rotate-45 -translate-y-1.5' : ''
-              }`}
-            />
-          </button>
+  {/* Hamburger button */}
+  <button
+    onClick={() => setIsOpen((prev) => !prev)}
+    className="relative w-10 h-10 flex items-center justify-center focus:outline-none z-50"
+    aria-label="Toggle menu"
+  >
+    {/* Top bar */}
+    <span
+      className={`absolute w-8 h-0.5 rounded bg-current transition-transform duration-300 ${isOpen ? 'rotate-45' : 'top-3'}`}
+      style={{ backgroundColor: theme.colors.secondary }}
+    />
+    {/* Middle bar */}
+    <span
+      className={`absolute w-8 h-0.5 rounded bg-current transition-opacity duration-300 ${isOpen ? 'opacity-0' : 'top-4'}`}
+      style={{ backgroundColor: theme.colors.secondary }}
+    />
+    {/* Bottom bar */}
+    <span
+      className={`absolute w-8 h-0.5 rounded bg-current transition-transform duration-300 ${isOpen ? '-rotate-45' : 'top-5'}`}
+      style={{ backgroundColor: theme.colors.secondary }}
+    />
+  </button>
 
-          {isOpen && (
-            <ul className="absolute top-full left-0 w-full bg-white flex flex-col items-center py-3 space-y-2 border-t border-[#3c3837]/30">
-              {pages.map((page) => (
-                <PageLink key={page.path} page={page} currentPath={pathname} />
-              ))}
-            </ul>
-          )}
-        </div>
+  {/* Mobile menu */}
+  {isOpen && (
+    <ul
+      className="absolute top-full right-4 w-64 flex flex-col items-center py-4 space-y-3 rounded-xl shadow-2xl z-40"
+      style={{
+        backgroundColor: theme.colors.background,
+        borderColor: theme.colors.secondary + '30',
+        borderWidth: '1px',
+      }}
+    >
+      {pages.map((page) => (
+        <PageLink
+          key={page.path}
+          page={page}
+          currentPath={pathname}
+          theme={theme}
+        />
+      ))}
+      <li>
+        <ThemeToggleButton />
+      </li>
+    </ul>
+  )}
+</div>
+
       </div>
     </nav>
   );

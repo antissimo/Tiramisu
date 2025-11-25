@@ -1,21 +1,29 @@
 'use client';
 
 import Link from 'next/link';
+import { useTheme } from '../context/ThemeContext';
+interface FooterProps {
+  className?: string;
+}
+export default function Footer({ className }: FooterProps) {
+  const { theme } = useTheme();
 
-export default function Footer() {
   return (
-    <footer className="bg-[#ffffff] text-[#3c3837] py-6 mt-12">
+    <footer
+      className="py-6 "
+      style={{ backgroundColor: theme.colors.primary, color: theme.colors.secondary }}
+    >
       <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
 
         {/* Social Icons */}
         <div className="flex items-center space-x-4 mb-4 md:mb-0">
-
           {/* Instagram */}
-          <a 
+          <a
             href="https://www.instagram.com/tiramisubarsplit/"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:opacity-70 transition-opacity"
+            style={{ color: theme.colors.secondary }}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
               <path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 
@@ -30,11 +38,12 @@ export default function Footer() {
           </a>
 
           {/* Facebook */}
-          <a 
+          <a
             href="https://www.facebook.com/p/Tiramis%C3%B9-Bar-Split-61575614048707/"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:opacity-70 transition-opacity"
+            style={{ color: theme.colors.secondary }}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
               <path d="M22 12a10 10 0 10-11.5 9.9v-7h-2v-3h2v-2.3c0-2 
@@ -45,11 +54,12 @@ export default function Footer() {
           </a>
 
           {/* TikTok */}
-          <a 
+          <a
             href="https://www.tiktok.com/@tiramisu.bar.split"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:opacity-70 transition-opacity"
+            style={{ color: theme.colors.secondary }}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
               <path d="M21 8.5a5.5 5.5 0 01-4.3-2.2v7.1a5.6 5.6 0 11-5.6-5.6c.3 0 
@@ -57,11 +67,10 @@ export default function Footer() {
               1.7 3.1A5.5 5.5 0 0121 6.2v2.3z"/>
             </svg>
           </a>
-
         </div>
 
         {/* Copyright */}
-        <div className="text-sm text-center md:text-right w-full md:w-auto">
+        <div className="text-sm text-center md:text-right w-full md:w-auto" style={{ color: theme.colors.secondary }}>
           &copy; {new Date().getFullYear()} Tiramisu. Sva prava pridržana.
         </div>
       </div>

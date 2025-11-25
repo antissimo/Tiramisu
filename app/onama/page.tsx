@@ -6,7 +6,7 @@ import { onamaSections } from '../config/oNama';
 import { useTheme } from '../context/ThemeContext';
 
 export default function ONamaPage() {
-  const theme = useTheme();
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <div className="min-h-screen px-4 py-12 space-y-24" style={{ backgroundColor: theme.colors.background }}>
