@@ -3,9 +3,9 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { useState, memo } from 'react';
+import { useState, memo, useRef, useEffect } from 'react';
 import { pages } from '../config/pages';
-import { useTheme} from '../context/ThemeContext';
+import { useTheme } from '../context/ThemeContext';
 import { FaMoon, FaSun } from 'react-icons/fa';
 import logo from '../assets/logo.png';
 import logoDark from '../assets/logoDarkTheme.png';
@@ -51,7 +51,22 @@ function ThemeToggleButton() {
 export default function Navigation() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  const { theme , isDark} = useTheme();
+  const { theme, isDark } = useTheme();
+
+  // Ref for mobile menu
+  const menuRef = useRef<HTMLUListElement>(null);
+
+  // Close menu if clicked outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isOpen && menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isOpen]);
 
   return (
     <nav className="sticky top-0 shadow z-50" style={{ backgroundColor: theme.colors.background }}>
@@ -72,61 +87,53 @@ export default function Navigation() {
           {pages.map((page) => (
             <PageLink key={page.path} page={page} currentPath={pathname} theme={theme} />
           ))}
-          <li>
-            <ThemeToggleButton />
-          </li>
+          <li><ThemeToggleButton /></li>
         </ul>
 
         {/* Mobile hamburger */}
         <div className="md:hidden relative">
-  {/* Hamburger button */}
-  <button
-    onClick={() => setIsOpen((prev) => !prev)}
-    className="relative w-10 h-10 flex items-center justify-center focus:outline-none z-50"
-    aria-label="Toggle menu"
-  >
-    {/* Top bar */}
-    <span
-      className={`absolute w-8 h-0.5 rounded bg-current transition-transform duration-300 ${isOpen ? 'rotate-45' : 'top-3'}`}
-      style={{ backgroundColor: theme.colors.secondary }}
-    />
-    {/* Middle bar */}
-    <span
-      className={`absolute w-8 h-0.5 rounded bg-current transition-opacity duration-300 ${isOpen ? 'opacity-0' : 'top-4'}`}
-      style={{ backgroundColor: theme.colors.secondary }}
-    />
-    {/* Bottom bar */}
-    <span
-      className={`absolute w-8 h-0.5 rounded bg-current transition-transform duration-300 ${isOpen ? '-rotate-45' : 'top-5'}`}
-      style={{ backgroundColor: theme.colors.secondary }}
-    />
-  </button>
+          <button
+            onClick={() => setIsOpen((prev) => !prev)}
+            className="relative w-10 h-10 flex items-center justify-center focus:outline-none z-50"
+            aria-label="Toggle menu"
+          >
+            <span
+              className={`absolute w-8 h-0.5 rounded bg-current transition-transform duration-300 ${isOpen ? 'rotate-45' : 'top-3'}`}
+              style={{ backgroundColor: theme.colors.secondary }}
+            />
+            <span
+              className={`absolute w-8 h-0.5 rounded bg-current transition-opacity duration-300 ${isOpen ? 'opacity-0' : 'top-4'}`}
+              style={{ backgroundColor: theme.colors.secondary }}
+            />
+            <span
+              className={`absolute w-8 h-0.5 rounded bg-current transition-transform duration-300 ${isOpen ? '-rotate-45' : 'top-5'}`}
+              style={{ backgroundColor: theme.colors.secondary }}
+            />
+          </button>
 
-  {/* Mobile menu */}
-  {isOpen && (
-    <ul
-      className="absolute top-full right-4 w-64 flex flex-col items-center py-4 space-y-3 rounded-xl shadow-2xl z-40"
-      style={{
-        backgroundColor: theme.colors.background,
-        borderColor: theme.colors.secondary + '30',
-        borderWidth: '1px',
-      }}
-    >
-      {pages.map((page) => (
-        <PageLink
-          key={page.path}
-          page={page}
-          currentPath={pathname}
-          theme={theme}
-        />
-      ))}
-      <li>
-        <ThemeToggleButton />
-      </li>
-    </ul>
-  )}
-</div>
-
+          {/* Mobile menu */}
+          {isOpen && (
+            <ul
+              ref={menuRef}
+              className="absolute top-full right-4 w-64 flex flex-col items-center py-4 space-y-3 rounded-xl shadow-2xl z-40"
+              style={{
+                backgroundColor: theme.colors.background,
+                borderColor: theme.colors.secondary + '30',
+                borderWidth: '1px',
+              }}
+            >
+              {pages.map((page) => (
+                <PageLink
+                  key={page.path}
+                  page={page}
+                  currentPath={pathname}
+                  theme={theme}
+                />
+              ))}
+              <li><ThemeToggleButton /></li>
+            </ul>
+          )}
+        </div>
       </div>
     </nav>
   );
