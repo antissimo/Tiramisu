@@ -17,7 +17,9 @@ export default function LokacijePage() {
             href={loc.googleMaps}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-[#a68835]/10 border border-[#3c3837]/30 rounded-lg overflow-hidden shadow hover:shadow-lg transition-all duration-300 flex flex-col"
+            className="bg-[#a68835]/10 border border-[#3c3837]/30 rounded-lg overflow-hidden shadow 
+                       transition-all duration-300 ease-out hover:shadow-xl 
+                       hover:scale-105 hover:opacity-90 flex flex-col"
           >
             {/* Image */}
             <div className="relative w-full h-48">
