@@ -37,7 +37,7 @@
     "**/*.mts",
     ".next\\dev/types/**/*.ts",
     ".next\\dev/types/**/*.ts"
-, "app/context/ThemeContext.tsx"  ],
+, "app/context/ThemeContext.tsx", "app/config/footer.js"  ],
   "exclude": [
     "node_modules"
   ]
